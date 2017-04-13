@@ -36,3 +36,12 @@ lftp -u 'ftpuser,ftppassword' backupspace.rimuhosting.com -e "set ftp:ssl-protec
 #The "flush-logs" mysql command is used to create a new binary log file.  This command might be issued to the mysql server outside of this script (such as when the mysql server is restarted), producing an extra binary log file.  In this case, the script will compress and back up the extra binary log file the next time backup is done.
 #Store the following line in /etc/crontab to execute newmysqlbinlog every 6 hours (this is of course configurable):
 #2 */6 * * * root /root/crontasks/newmysqlbinlog
+
+#DATABASE RECOVERY
+ 
+#(If you have to restore damaged MyISAM tables, try to recover them using REPAIR TABLE or myisamchk -r first.)
+ #   The full backup will be bzip2-compressed, and will look like this: mysql-dump.122307.sql.bz2  Binary log files will look like this:  mybinlog.000006.bz2)  Copy all these bz2 files to the server where you need to recover the databases.
+ #   Decompress all the backup files (for example: bunzip2 mysql-dump.122307.sql.bz2 and bunzip2 mybinlog.000006.bz2).
+ #   Run a command like this: mysql < mysql-dump.122307.sql  This should recreate the databases as they were at the time of the full backup.  (If the the databases exist, any existing tables will be removed!) 
+ #   Next run a command like this: mysqlbinlog binlog.[0-9]* | mysql  This command tells the program "mysqlbinlog" to process all the binary log files, converting them into mysql statements.  Mysql applies all the sql commands, bringing the databases up-to-date, to the moment of the last incremental backup.
+
