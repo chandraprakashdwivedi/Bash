@@ -1,7 +1,7 @@
 #!/bin/bash
-echo "---------------------------------------------------------------------------"
+
 ALERT=80
-df -h | grep -vE  'Filesystem' | awk '{ print $1 " " $5 } ' |  /bin/cut -d '%' -f1 | while read output;
+df -h | grep -vE  'Mounted' | awk '{ print $6 " " $5 } ' |  /bin/cut -d '%' -f1 | while read output;
 do
 
 usep=$(echo $output | awk '{ print $2 }' )
@@ -13,7 +13,7 @@ done
 
 echo "---------------------------------------------------------------------------"
 
-df -ih | grep -vE  'Filesystem' | awk '{ print $1 " " $5 } ' |  /bin/cut -d '%' -f1 | while read output;
+df -ih | grep -vE  'Mounted' | awk '{ print $6 " " $5 } ' |  /bin/cut -d '%' -f1 | while read output;
 do
 
 usep=$(echo $output | awk '{ print $2 }' )
